@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { userAPI } from './userApi';
 
 // First, create the thunk
 const fetchUserById = createAsyncThunk(
@@ -9,11 +10,25 @@ const fetchUserById = createAsyncThunk(
   }
 )
 
+// Then, handle actions in your reducers:
+const usersSlice = createSlice({
+  name: 'users',
+  initialState: { entities: [], loading: 'idle' },
+  reducers: {
+    // standard reducer logic, with auto-generated action types per reducer
+  },
+  extraReducers: {
+    // Add reducers for additional action types here, and handle loading state as needed
+    [fetchUserById.fulfilled]: (state, action) => {
+      // Add user to the state array
+      state.entities.push(action.payload)
+    }
+  }
+})
+
 export const userListSlice = createSlice({
   name: 'userList',
-  initialState: {
-    value: 0,
-  },
+  initialState: { entities: [], loading: 'idle' },
   reducers: {
     increment: state => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
