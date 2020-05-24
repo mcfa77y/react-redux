@@ -6,7 +6,7 @@ export const fetchUserById = createAsyncThunk(
     'users/fetchByIdStatus',
     async (userId, { getState, requestId }) => {
         log_json('user list slice - fetchUserById:', getState());
-        const { currentRequestId, loading } = getState().users;
+        const { currentRequestId, loading } = getState().userList;
         if (loading !== 'pending' || requestId !== currentRequestId) {
             return;
         }
