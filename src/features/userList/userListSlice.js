@@ -11,7 +11,7 @@ export const fetchUserById = createAsyncThunk(
             return;
         }
         const response = await userAPI.fetchById(userId);
-        return response.data;
+        return response;
     },
 );
 

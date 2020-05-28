@@ -25,7 +25,7 @@ module.exports = {
     rules: {
         'linebreak-style': 'off',
         'react/jsx-indent': [0, 4],
-        'jsx-indent-props': [0, 2],
+        'jsx-indent-props': [0, 4],
         'no-param-reassign': 'off',
         'import/prefer-default-export': 'off',
         camelcase: 'off',
