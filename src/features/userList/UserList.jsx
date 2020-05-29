@@ -6,6 +6,7 @@ import { fetchUserById } from './userListSlice';
 
 export function UserList() {
     const userId = useSelector((state) => state.counter.value);
+    const { entities, loading, currentRequestId } = useSelector((state) => state.userList);
     useSelector((state) => {
         console.log(`use selector - state:\n${JSON.stringify(state, null, 2)}`);
         return state.users;
@@ -29,9 +30,7 @@ export function UserList() {
     };
 
     const onClick = () => {
-        dispatch(fetchOneUser(userId)).then((resp) => {
-            console.log(resp);
-        });
+        dispatch(fetchUserById(userId));
     };
     //   return await fetchOneUser(userId);
     // useEffect(fetchOneUser(userId), userId);
@@ -39,6 +38,17 @@ export function UserList() {
         <div>
             hi
             <button type="button" onClick={onClick}>sub</button>
+            <br/>
+            entities:
+            <pre>
+                {JSON.stringify(entities, null, 2)}
+            </pre>
+            <br/>
+            loading:
+            {loading}
+            <br/>
+            currentRequestId:
+            {currentRequestId}
         </div>
     );
 }
