@@ -11,7 +11,11 @@ export const userAPI = {
             }
             return user;
         }),
-    // return Axios.get(`https://jsonplaceholder.typicode.com/posts/${id}`)
 
+    fetchList: () => axios.get('https://jsonplaceholder.typicode.com/users')
+        .then((response) => {
+            const { data: user_list } = response;
+            return user_list;
+        }),
 
 };
