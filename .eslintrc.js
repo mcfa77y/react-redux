@@ -31,7 +31,7 @@ module.exports = {
         camelcase: 'off',
         indent: [
             'error',
-            4
+            2
         ]
     },
     settings: {

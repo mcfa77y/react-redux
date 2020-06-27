@@ -1,21 +1,29 @@
 import React from 'react';
-import { Counter } from './features/counter/Counter';
-import { UserList } from './features/user/user_list/user_list';
-// import './App.css';
+import {
+  Switch, Route, BrowserRouter,
+} from 'react-router-dom';
+// import { Counter } from './features/counter/Counter';
+import { UserList } from './features/user/list/user_list';
+import { User_Detail } from './features/user/detail/user_detail';
+import { Post_Detail } from './features/post/detail/post_detail';
 
 function App() {
-    return (
-        <div className="container">
-            <div className="App">
-                <header className="App-header">
-                    <Counter />
-                </header>
-            </div>
-            <div>
-                <UserList />
-            </div>
-        </div>
-    );
+  return (
+    <div className="container">
+      <div className="App">
+        <BrowserRouter>
+          <Switch>
+            <Route exact path="/user/:id" component={User_Detail} />
+            <Route exact path="/post/:id" component={Post_Detail} />
+            <Route exact path="/">
+              <UserList />
+            </Route>
+          </Switch>
+        </BrowserRouter>
+      </div>
+
+    </div>
+  );
 }
 
 export default App;

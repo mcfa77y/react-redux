@@ -1,21 +1,16 @@
 const axios = require('axios');
 
-export const userAPI = {
-    fetchById: (id) => axios.get('https://jsonplaceholder.typicode.com/users')
-        .then((response) => {
-            const { data: user_list } = response;
-            const user_filtered = user_list.filter((user) => user.id === id);
-            let user = {};
-            if (user_filtered.length > 0) {
-                user = user_filtered[0];
-            }
-            return user;
-        }),
+export const user_api = {
+  fetch_by_id: (id) => axios.get(`https://jsonplaceholder.typicode.com/users/${id}`)
+    .then((response) => {
+      const { data: user } = response;
+      return user;
+    }),
 
-    fetchList: () => axios.get('https://jsonplaceholder.typicode.com/users')
-        .then((response) => {
-            const { data: user_list } = response;
-            return user_list;
-        }),
+  fetch_list: () => axios.get('https://jsonplaceholder.typicode.com/users')
+    .then((response) => {
+      const { data: user_list } = response;
+      return user_list;
+    }),
 
 };
