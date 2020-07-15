@@ -8,11 +8,12 @@ class Album_List_Slice extends Base_List_Slice {
     console.log('Album_List_Slice created');
   }
 
-  async_thunk() {
+  async_thunk_fn() {
+    console.log('calling album async thunk');
     return createAsyncThunk(
       `${this.entity_name}/fetch_entity_list`,
-      async (user_id, { getState, requestId }) => {
-        const { currentRequestId, loading } = getState().album_list;
+      async (user_id: number, { getState, requestId }: {getState: any, requestId: any}) => {
+        const { currentRequestId, loading } = getState()[this.entity_name];
         if (loading !== 'pending' || requestId !== currentRequestId) {
           return;
         }
@@ -22,6 +23,7 @@ class Album_List_Slice extends Base_List_Slice {
     );
   }
 }
+
 export const album_list_slice = new Album_List_Slice();
 
 export default album_list_slice.list_slice().reducer;

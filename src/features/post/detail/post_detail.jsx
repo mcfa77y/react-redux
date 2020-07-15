@@ -49,12 +49,6 @@ export function Post_Detail({ match }) {
     <div>
       {e_unit}
       <Comment_List />
-      <br />
-            loading:
-      {loading}
-      <br />
-            currentRequestId:
-      {currentRequestId}
     </div>
   );
 }

@@ -28,17 +28,14 @@ export function Comment_List() {
   }, [post_id]);
 
   let e_list = (
-    <tr key={99}>
-      <th scope="row">{99}</th>
-      <td>no body</td>
-    </tr>
+    <div>loading comments</div>
   );
   if (entity_list.length > 0) {
     e_list = entity_list.map((e) => (
       <tr key={e.id}>
         <th scope="row">{e.id}</th>
         <td>
-          <Link to={`/comment/${e.id}`}>{e.name}</Link>
+          {e.name}
         </td>
         <td>{e.body}</td>
         <td>{e.email}</td>
@@ -68,16 +65,6 @@ export function Comment_List() {
       </div>
 
       <br />
-
-      <br />
-            comment loading:
-      {loading}
-      <br />
-            comment currentRequestId:
-      {currentRequestId}
-      <br />
-            comment error:
-      {error}
     </div>
   );
 }

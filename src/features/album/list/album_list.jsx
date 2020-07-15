@@ -2,7 +2,8 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { album_list_slice } from './album_list_slice';
+
+const { album_list_slice } = require('./album_list_slice.ts');
 
 export function Album_List() {
   const user_id = useSelector((state) => state.user.entity.id);
@@ -17,9 +18,9 @@ export function Album_List() {
       if (user_id === undefined) return;
       console.log(`fetchAlbumList - user_id:${user_id}`);
       await dispatch(album_list_slice.async_thunk(user_id));
-      console.log(`xx comment entity list size: ${entity_list.length} user_id:${user_id}`);
+      console.log(`xx album entity list size: ${entity_list.length} user_id:${user_id}`);
     } catch (err) {
-      console.error(`Fetch failed: ${err.message}`);
+      console.error(`fetchAlbumList failed: ${err.message}`);
     }
   };
 
@@ -62,18 +63,7 @@ export function Album_List() {
           </table>
         </div>
       </div>
-
       <br />
-
-      <br />
-            album loading:
-      {loading}
-      <br />
-            album currentRequestId:
-      {currentRequestId}
-      <br />
-            album error:
-      {error}
     </div>
   );
 }

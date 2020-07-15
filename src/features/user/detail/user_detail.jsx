@@ -64,27 +64,35 @@ export function User_Detail({ match }) {
   return (
     <div>
       <h3>
-        User:
+        User
       </h3>
       {e_unit}
       <hr />
-      <h3>
-      Posts:
-      </h3>
+      <div className="row">
+        <div className="col">
+          <h4>
+            Albums
+          </h4>
+        </div>
+        <div className="col">
+          <h4>
+          Posts
+          </h4>
+        </div>
+      </div>
 
-      <Post_List />
+      <div className="row">
+        <div className="col">
 
-      <h3>
-      Albums:
-      </h3>
+          <Album_List />
+        </div>
+        <div className="col">
+          <Post_List />
 
-      <Album_List />
-      <br />
-            user loading:
-      {loading}
-      <br />
-            user currentRequestId:
-      {currentRequestId}
+        </div>
+      </div>
+
     </div>
+
   );
 }

@@ -28,10 +28,7 @@ export function Post_List() {
   }, [user_id]);
 
   let e_list = (
-    <tr key={99}>
-      <th scope="row">{99}</th>
-      <td>no body</td>
-    </tr>
+    <div>loading posts</div>
   );
   if (entity_list.length > 0) {
     e_list = entity_list.map((e) => (
@@ -62,18 +59,6 @@ export function Post_List() {
           </table>
         </div>
       </div>
-
-      <br />
-
-      <br />
-            post loading:
-      {loading}
-      <br />
-            post currentRequestId:
-      {currentRequestId}
-      <br />
-            post error:
-      {error}
     </div>
   );
 }

@@ -64,18 +64,6 @@ export function UserList() {
           </table>
         </div>
       </div>
-
-      <br />
-
-      <br />
-            loading:
-      {loading}
-      <br />
-            currentRequestId:
-      {currentRequestId}
-      <br />
-            error:
-      {error}
     </div>
   );
 }
