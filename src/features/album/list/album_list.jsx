@@ -2,11 +2,12 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { select_user_id } from '../../user/detail/user_detail_slice';
 
 const { album_list_slice } = require('./album_list_slice.ts');
 
 export function Album_List() {
-  const user_id = useSelector((state) => state.user.entity.id);
+  const user_id = useSelector(select_user_id);
 
   const {
     entity_list, loading, currentRequestId, error,

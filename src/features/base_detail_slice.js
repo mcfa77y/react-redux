@@ -7,14 +7,15 @@ class Base_Detail_Slice {
 
     this.base_entity_name = entity_name;
     this.entity_name = `${entity_name}_detail`;
+    this.async_thunk = this.async_thunk_fn();
   }
 
   async_thunk_fn() {
     throw new Error('You have to implement the method doSomething!');
   }
 
-  detail_slice() {
-    this.async_thunk = this.async_thunk_fn();
+  slice() {
+    // this.async_thunk = this.async_thunk_fn();
     return createSlice({
       name: `${this.entity_name}`,
       initialState: {

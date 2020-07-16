@@ -8,7 +8,7 @@ export function Photo_List() {
   const album_id = useSelector((state) => state.album_detail.entity.id);
 
   const {
-    entity_list: photo_list
+    entity_list: photo_list,
   } = useSelector((state) => state.photo_list);
 
   const dispatch = useDispatch();
@@ -37,20 +37,21 @@ export function Photo_List() {
     e_list = photo_list.map(({
       id, title, url, thumbnailUrl,
     }) => (
-      <div className="media">
-        <a href={url}>
-          <img className="mr-3" src={thumbnailUrl} alt={title} />
-        </a>
-        <div className="media-body">
-          <h5 className="mt-0">{title}</h5>
-          {id}
+      <div className="col-sm-6 col-md-2">
+        <div className="card" style={{ width: '10rem' }}>
+          <a href={url}><img className="card-img-top" src={thumbnailUrl} alt={title} /></a>
+          <div className="card-body">
+            <h5 className="card-title">{id}</h5>
+            <p className="card-text">{title}</p>
+          </div>
         </div>
       </div>
+
     ));
   }
 
   return (
-    <div>
+    <div className="row">
       {e_list}
     </div>
   );

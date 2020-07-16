@@ -28,4 +28,4 @@ export const select_album = (state: any) => state.album_detail;
 
 export const album_detail_slice = new Album_Detail_Slice();
 
-export default album_detail_slice.detail_slice().reducer;
+export default album_detail_slice.slice().reducer;

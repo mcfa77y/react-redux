@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Comment_List } from '../../comment/list/comment_list';
 // import { fetchPostById, selectPosts } from '../post_list/post_list_slice';
-import { fetch_post_by_id, select_post } from './post_detail_slice';
+import { select_post, post_detail_slice } from './post_detail_slice';
 
 export function Post_Detail({ match }) {
   const post_id = parseInt(match.params.id, 10);
@@ -19,7 +19,7 @@ export function Post_Detail({ match }) {
     }
     try {
       console.log(`fetchOnePost - post_id: ${post_id}`);
-      dispatch(fetch_post_by_id(post_id));
+      dispatch(post_detail_slice.async_thunk(post_id));
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }

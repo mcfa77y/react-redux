@@ -2,10 +2,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetch_comment_list_by_post_id, select_comments } from './comment_list_slice';
+import { comment_list_slice, select_comments } from './comment_list_slice';
+import { select_post_id } from '../../post/detail/post_detail_slice';
 
 export function Comment_List() {
-  const post_id = useSelector((state) => state.post.entity.id);
+  const post_id = useSelector(select_post_id);
 
   const {
     entity_list, loading, currentRequestId, error,
@@ -16,7 +17,7 @@ export function Comment_List() {
     try {
       if (post_id === undefined) return;
       console.log(`fetchCommentList - user_id:${post_id}`);
-      await dispatch(fetch_comment_list_by_post_id(post_id));
+      await dispatch(comment_list_slice.async_thunk(post_id));
       console.log(`xx comment entity list size: ${entity_list.length} user_id:${post_id}`);
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);

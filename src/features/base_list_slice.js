@@ -7,6 +7,7 @@ class Base_List_Slice {
 
     this.entity_name = `${entity_name}_list`;
     this.base_entity_name = entity_name;
+    this.async_thunk = this.async_thunk_fn();
   }
 
   async_thunk_fn() {
@@ -14,7 +15,6 @@ class Base_List_Slice {
   }
 
   list_slice() {
-    this.async_thunk = this.async_thunk_fn();
     return createSlice({
       name: `${this.entity_name}`,
       initialState: {

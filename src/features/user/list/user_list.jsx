@@ -2,18 +2,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetchUserList, selectUsers } from './user_list_slice';
+import { user_list_slice, select_user_list } from './user_list_slice.ts';
 
 export function UserList() {
   const {
     entity_list, loading, currentRequestId, error,
-  } = useSelector(selectUsers);
+  } = useSelector(select_user_list);
 
   const dispatch = useDispatch();
   const handleUserList = async () => {
     try {
       console.log('fetchUserList - :');
-      await dispatch(fetchUserList());
+      await dispatch(user_list_slice.async_thunk());
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }

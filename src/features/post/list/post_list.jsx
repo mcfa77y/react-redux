@@ -2,10 +2,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { fetch_post_list_by_user_id, select_posts } from './post_list_slice';
+import { select_user_id } from '../../user/detail/user_detail_slice';
+import { select_posts, post_list_slice } from './post_list_slice';
 
 export function Post_List() {
-  const user_id = useSelector((state) => state.user.entity.id);
+  const user_id = useSelector(select_user_id);
 
   const {
     entity_list, loading, currentRequestId, error,
@@ -16,7 +17,7 @@ export function Post_List() {
     try {
       if (user_id === undefined) return;
       console.log(`fetchPostList - user_id:${user_id}`);
-      await dispatch(fetch_post_list_by_user_id(user_id));
+      await dispatch(post_list_slice.async_thunk(user_id));
       console.log(`xx post entity list size: ${entity_list.length} user_id:${user_id}`);
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
@@ -41,7 +42,6 @@ export function Post_List() {
     ));
   }
 
-  console.log(`post entity list size: ${entity_list.length} user_id:${user_id}`);
   return (
     <div>
       <div className="row">

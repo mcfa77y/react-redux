@@ -30,7 +30,7 @@ export function Album_Detail({ match }) {
   return (
     <div>
       <h3>
-                Album:
+        Album:
         {entity.title}
       </h3>
       <Photo_List />

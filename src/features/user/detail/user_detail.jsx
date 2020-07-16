@@ -3,21 +3,21 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Post_List } from '../../post/list/post_list';
 import { Album_List } from '../../album/list/album_list';
-// import { fetchUserById, selectUsers } from '../user_list/user_list_slice';
-import { fetch_user_by_id, selectUser } from './user_detail_slice';
+
+const { select_user, user_detail_slice } = require('./user_detail_slice.ts');
 
 export function User_Detail({ match }) {
   const user_id = parseInt(match.params.id, 10);
   const {
     entity, loading, currentRequestId, error,
-  } = useSelector(selectUser);
+  } = useSelector(select_user);
 
   const dispatch = useDispatch();
 
   const handleFetchUser = () => {
     try {
       // console.log(`fetchOneUser - user_id: ${userId}`);
-      dispatch(fetch_user_by_id(user_id));
+      dispatch(user_detail_slice.async_thunk(user_id));
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }
