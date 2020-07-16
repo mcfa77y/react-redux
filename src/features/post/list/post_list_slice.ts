@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, AsyncThunk } from '@reduxjs/toolkit';
 import { post_api } from '../post_api';
 import Base_List_Slice from '../../base_list_slice';
 
@@ -7,7 +7,7 @@ class Post_List_Slice extends Base_List_Slice {
     super('post');
   }
 
-  async_thunk_fn() {
+  async_thunk_fn(): AsyncThunk<any, number, {}> {
     return createAsyncThunk(
       `${this.entity_name}/fetch_entity_list`,
       async (user_id: number, { getState, requestId }: { getState: any, requestId: any }) => {

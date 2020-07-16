@@ -1,8 +1,13 @@
 /* eslint-disable class-methods-use-this */
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, AsyncThunk, Slice } from '@reduxjs/toolkit';
 
 class Base_Detail_Slice {
-  constructor(entity_name) {
+  base_entity_name: string;
+  entity_name: string;
+  async_thunk: any;
+  // async_thunk: AsyncThunk<any, number, {}>;
+
+  constructor(entity_name: string) {
     console.log(`Base detail slice: ${entity_name}`);
 
     this.base_entity_name = entity_name;
@@ -10,11 +15,16 @@ class Base_Detail_Slice {
     this.async_thunk = this.async_thunk_fn();
   }
 
-  async_thunk_fn() {
+  async_thunk_fn(): AsyncThunk<any, number, {}> {
     throw new Error('You have to implement the method doSomething!');
   }
 
-  slice() {
+  slice(): Slice<{
+    entity: {};
+    loading: string;
+    currentRequestId: undefined;
+    error: null;
+  }, {}, string> {
     // this.async_thunk = this.async_thunk_fn();
     return createSlice({
       name: `${this.entity_name}`,
@@ -52,7 +62,7 @@ class Base_Detail_Slice {
     });
   }
 
-  select_entity(state) {
+  select_entity(state:any) {
     console.log(`select_entity: ${this.entity_name}`);
     return state[`${this.entity_name}`];
   }
