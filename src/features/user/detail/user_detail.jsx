@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Post_List } from '../../post/list/post_list';
 import { Album_List } from '../../album/list/album_list';
+import { Todo_List } from '../../todo/list/todo_list';
 
 const { select_user, user_detail_slice } = require('./user_detail_slice.ts');
 
@@ -70,25 +71,13 @@ export function User_Detail({ match }) {
       <hr />
       <div className="row">
         <div className="col">
-          <h4>
-            Albums
-          </h4>
-        </div>
-        <div className="col">
-          <h4>
-          Posts
-          </h4>
-        </div>
-      </div>
-
-      <div className="row">
-        <div className="col">
-
           <Album_List />
         </div>
         <div className="col">
           <Post_List />
-
+        </div>
+        <div className="col">
+          <Todo_List />
         </div>
       </div>
 
