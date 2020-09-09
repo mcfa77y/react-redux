@@ -1,13 +1,16 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import Todo_API from '../todo_api';
 import { log_json } from '../../utils';
-import Base_List_Slice from '../../base_list_slice';
+import Base_Slice from '../../base_slice';
 
 const todo_api = new Todo_API();
 
-class Todo_List_Slice extends Base_List_Slice {
+class Todo_List_Slice extends Base_Slice {
+  fetch_by_user_id: any;
   constructor() {
-    super('todo');
+    super('todo_list');
+    this.fetch_by_user_id = this.async_thunk_fn();
+    this.async_thunk_list.push(this.fetch_by_user_id);
   }
 
   async_thunk_fn() {
@@ -30,4 +33,4 @@ export const select_todo_list = (state:any) => state.todo_list;
 
 export const todo_list_slice = new Todo_List_Slice();
 
-export default todo_list_slice.list_slice().reducer;
+export default todo_list_slice.slice().reducer;

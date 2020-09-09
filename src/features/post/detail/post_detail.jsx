@@ -3,12 +3,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Comment_List } from '../../comment/list/comment_list';
 // import { fetchPostById, selectPosts } from '../post_list/post_list_slice';
-import { select_post, post_detail_slice } from './post_detail_slice';
+import { select_post, post_detail_slice } from './post_detail_slice.ts';
+import Debug from '../../../components/debug.tsx';
 
 export function Post_Detail({ match }) {
   const post_id = parseInt(match.params.id, 10);
   const {
-    entity, loading, currentRequestId, error,
+    response, loading, currentRequestId, error,
   } = useSelector(select_post);
 
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ export function Post_Detail({ match }) {
     }
     try {
       console.log(`fetchOnePost - post_id: ${post_id}`);
-      dispatch(post_detail_slice.async_thunk(post_id));
+      dispatch(post_detail_slice.fetch_by_id(post_id));
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }
@@ -35,18 +36,25 @@ export function Post_Detail({ match }) {
     </div>
   );
 
-  if (entity !== undefined && entity.id !== undefined) {
+  if (response !== undefined && response.id !== undefined) {
     e_unit = (
       <div className="jumbotron">
-        <h1 className="display-4">{entity.title}</h1>
+        <h1 className="display-4">{response.title}</h1>
         <hr className="my-4" />
-        <p>{entity.body}</p>
+        <p>{response.body}</p>
       </div>
     );
   }
 
   return (
     <div>
+      {/* <Debug
+        title="post detail"
+        response={response}
+        loading={loading}
+        currentRequestId={currentRequestId}
+        error={error}
+      /> */}
       {e_unit}
       <Comment_List />
     </div>

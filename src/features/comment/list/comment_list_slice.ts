@@ -1,10 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { comment_api } from '../comment_api';
-import Base_List_Slice from '../../base_list_slice';
+import Base_Slice from '../../base_slice';
 
-class Comment_List_Slice extends Base_List_Slice {
+class Comment_List_Slice extends Base_Slice {
+  fetch_by_post_id: any;
   constructor() {
-    super('comment');
+    super('comment_list');
+    this.fetch_by_post_id = this.async_thunk_fn();
+    this.async_thunk_list.push(this.fetch_by_post_id);
   }
 
   async_thunk_fn() {
@@ -26,4 +29,4 @@ export const select_comments = (state:any) => state.comment_list;
 
 export const comment_list_slice = new Comment_List_Slice();
 
-export default comment_list_slice.list_slice().reducer;
+export default comment_list_slice.slice().reducer;

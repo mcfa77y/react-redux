@@ -22,7 +22,7 @@ export const album_api = {
       return album_list;
     }),
 
-  fetch_list: () => axios.get(`${entity_url}`)
+  fetch_all: () => axios.get(`${entity_url}`)
     .then((response: gen_reponse) => {
       const { data: post_list } = response;
       return post_list;

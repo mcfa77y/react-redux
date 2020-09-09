@@ -3,19 +3,20 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
-import { user_list_slice, select_user_list } from './user_list_slice.ts';
+import { user_list_slice, select_user_list } from './user_list_slice';
 import { customStyles } from '../../style';
+import Debug from '../../../components/debug';
 
 export function UserList() {
   const {
-    entity_list, loading, currentRequestId, error,
+    response, loading, currentRequestId, error,
   } = useSelector(select_user_list);
 
   const dispatch = useDispatch();
   const handleUserList = async () => {
     try {
-      console.log('fetchUserList - :');
-      await dispatch(user_list_slice.async_thunk());
+      console.log('fetchUserList');
+      dispatch(user_list_slice.fetch_all({}));
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }
@@ -31,7 +32,7 @@ export function UserList() {
       selector: 'id',
       sortable: true,
       width: '50px',
-      cell: (row) => (
+      cell: (row: any) => (
         <b>
           {row.id}
         </b>
@@ -41,7 +42,7 @@ export function UserList() {
       name: 'Name',
       selector: 'name',
       sortable: true,
-      cell: (row) => (
+      cell: (row: any) => (
         <Link to={`/user/${row.id}`}>{row.name}</Link>
       ),
     },
@@ -52,15 +53,24 @@ export function UserList() {
     },
   ];
   const striped = true;
+
   return (
-    <DataTable
-      columns={columns}
-      data={entity_list}
-      striped={striped}
-      progressPending={!loading}
-      customStyles={customStyles}
-      dense={striped}
-      title="Users"
-    />
+    <div>
+      {/* <Debug 
+        title="user list"
+        response={response}
+        loading={loading}
+        currentRequestId={currentRequestId}
+        error={error} /> */}
+      <DataTable
+        columns={columns}
+        data={response}
+        striped={striped}
+        progressPending={!loading}
+        customStyles={customStyles}
+        dense={striped}
+        title="Users"
+      />
+    </div>
   );
 }

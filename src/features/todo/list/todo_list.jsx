@@ -9,14 +9,14 @@ import { customStyles } from '../../style';
 export function Todo_List() {
   const user_id = useSelector(select_user_id);
   const {
-    entity_list, loading,
+    response, loading,
   } = useSelector(select_todo_list);
   const dispatch = useDispatch();
   const handleTodoList = async () => {
     try {
       if (user_id === undefined) return;
       console.log('fetchTodoList - :');
-      await dispatch(todo_list_slice.async_thunk(user_id));
+      await dispatch(todo_list_slice.fetch_by_user_id(user_id));
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }
@@ -25,28 +25,6 @@ export function Todo_List() {
   useEffect(() => {
     handleTodoList();
   }, [user_id]);
-
-  let e_list = (
-    <tr key={99}>
-      <th scope="row">{99}</th>
-      <td>no body</td>
-      <td>no@body.com</td>
-    </tr>
-  );
-  if (entity_list.length > 0) {
-    console.log(JSON.stringify(entity_list, null, 1));
-    e_list = entity_list.map(({ id, title, completed }) => (
-      <tr key={id}>
-        <th scope="row">{id}</th>
-        <td>
-          {String(completed)}
-        </td>
-        <td>
-          {title}
-        </td>
-      </tr>
-    ));
-  }
 
   const columns = [
     {
@@ -84,7 +62,7 @@ export function Todo_List() {
     <DataTable
       title="Todos"
       columns={columns}
-      data={entity_list}
+      data={response}
       striped={striped}
       progressPending={!loading}
       customStyles={customStyles}

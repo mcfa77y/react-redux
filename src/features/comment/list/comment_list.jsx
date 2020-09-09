@@ -1,15 +1,15 @@
 // import {  } from '@reduxjs/toolkit';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { comment_list_slice, select_comments } from './comment_list_slice';
-import { select_post_id } from '../../post/detail/post_detail_slice';
+import { comment_list_slice, select_comments } from './comment_list_slice.ts';
+import { select_post_id } from '../../post/detail/post_detail_slice.ts';
+import Debug from '../../../components/debug.tsx';
 
 export function Comment_List() {
   const post_id = useSelector(select_post_id);
 
   const {
-    entity_list, loading, currentRequestId, error,
+    response, loading, currentRequestId, error,
   } = useSelector(select_comments);
 
   const dispatch = useDispatch();
@@ -17,8 +17,8 @@ export function Comment_List() {
     try {
       if (post_id === undefined) return;
       console.log(`fetchCommentList - user_id:${post_id}`);
-      await dispatch(comment_list_slice.async_thunk(post_id));
-      console.log(`xx comment entity list size: ${entity_list.length} user_id:${post_id}`);
+      await dispatch(comment_list_slice.fetch_by_post_id(post_id));
+      console.log(`xx comment entity list size: ${response.length} user_id:${post_id}`);
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }
@@ -31,8 +31,8 @@ export function Comment_List() {
   let e_list = (
     <div>loading comments</div>
   );
-  if (entity_list.length > 0) {
-    e_list = entity_list.map((e) => (
+  if (response.length > 0) {
+    e_list = response.map((e) => (
       <tr key={e.id}>
         <th scope="row">{e.id}</th>
         <td>
@@ -44,9 +44,16 @@ export function Comment_List() {
     ));
   }
 
-  console.log(`comment entity list size: ${entity_list.length} post_id:${post_id}`);
+  console.log(`comment entity list size: ${response.length} post_id:${post_id}`);
   return (
     <div>
+      {/* <Debug
+        title="post list"
+        response={response}
+        loading={loading}
+        currentRequestId={currentRequestId}
+        error={error}
+      /> */}
       <div className="row">
         <div className="col">
           <table className="table table-striped">

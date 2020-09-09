@@ -1,14 +1,15 @@
 // import {  } from '@reduxjs/toolkit';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Debug from '../../../components/debug.tsx';
 
 const { photo_list_slice } = require('./photo_list_slice.ts');
 
-export function Photo_List() {
-  const album_id = useSelector((state) => state.album_detail.entity.id);
+export function PhotoList() {
+  const album_id = useSelector((state) => state.album_detail.response.id);
 
   const {
-    entity_list: photo_list,
+    response: photo_list, loading, currentRequestId, error,
   } = useSelector((state) => state.photo_list);
 
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ export function Photo_List() {
     try {
       if (album_id === undefined) return;
       console.log(`fetchPhotoList - album_id:${album_id}`);
-      await dispatch(photo_list_slice.async_thunk(album_id));
+      await dispatch(photo_list_slice.fetch_by_album_id(album_id));
       console.log(`xx album entity list size: ${photo_list.length} album_id:${album_id}`);
     } catch (err) {
       console.error(`fetchPhotoList failed: ${err.message}`);
@@ -29,7 +30,7 @@ export function Photo_List() {
 
   let e_list = (
     <div>
-            loading photos
+      loading photos
     </div>
   );
 
@@ -37,12 +38,15 @@ export function Photo_List() {
     e_list = photo_list.map(({
       id, title, url, thumbnailUrl,
     }) => (
-      <div className="col-sm-6 col-md-2">
-        <div className="card" style={{ width: '10rem' }}>
-          <a href={url}><img className="card-img-top" src={thumbnailUrl} alt={title} /></a>
-          <div className="card-body">
-            <h5 className="card-title">{id}</h5>
-            <p className="card-text">{title}</p>
+      <div key={id}>
+
+        <div className="col-sm-6 col-md-2">
+          <div className="card" style={{ width: '10rem' }}>
+            <a href={url}><img className="card-img-top" src={thumbnailUrl} alt={title} /></a>
+            <div className="card-body">
+              <h5 className="card-title">{id}</h5>
+              <p className="card-text">{title}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -52,6 +56,13 @@ export function Photo_List() {
 
   return (
     <div className="row">
+      {/* <Debug
+        title="photo list"
+        response={photo_list}
+        loading={loading}
+        currentRequestId={currentRequestId}
+        error={error}
+      /> */}
       {e_list}
     </div>
   );

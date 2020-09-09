@@ -1,11 +1,14 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import Base_Detail_Slice from '../../base_detail_slice';
+import Base_Slice from '../../base_slice';
 import { album_api } from '../album_api';
 
-class Album_Detail_Slice extends Base_Detail_Slice {
+class Album_Detail_Slice extends Base_Slice {
+    fetch_by_id: any;
     constructor() {
-        super('album');
+        super('album_detail');
         console.log('Album_Detail_Slice created');
+        this.fetch_by_id = this.async_thunk_fn();
+        this.async_thunk_list.push(this.fetch_by_id);
     }
 
     async_thunk_fn() {

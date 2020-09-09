@@ -1,11 +1,14 @@
 /* eslint-disable consistent-return */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { post_api } from '../post_api';
-import Base_Detail_Slice from '../../base_detail_slice';
+import Base_Slice from '../../base_slice';
 
-class Post_Detail_Slice extends Base_Detail_Slice {
+class Post_Detail_Slice extends Base_Slice {
+  fetch_by_id: any;
   constructor() {
-      super('post');
+      super('post_detail');
+      this.fetch_by_id = this.async_thunk_fn();
+      this.async_thunk_list.push(this.fetch_by_id)
   }
 
   async_thunk_fn() {
@@ -27,7 +30,7 @@ class Post_Detail_Slice extends Base_Detail_Slice {
 
 
 export const select_post = (state:any) => state.post_detail;
-export const select_post_id = (state:any) => state.post_detail.entity.id;
+export const select_post_id = (state:any) => state.post_detail.response.id;
 
 export const post_detail_slice = new Post_Detail_Slice();
 

@@ -7,10 +7,16 @@ export const user_api = {
       return user;
     }),
 
-  fetch_list: () => axios.get('https://jsonplaceholder.typicode.com/users')
+  fetch_all: () => axios.get('https://jsonplaceholder.typicode.com/users')
     .then((response) => {
+      console.log('good fetch');
       const { data: user_list } = response;
       return user_list;
+    })
+    .catch((err) => {
+      console.log('bad fetch');
+      console.log(`err: ${JSON.stringify(err, null, 2)}`);
+      return err;
     }),
 
 };

@@ -1,37 +1,25 @@
 /* eslint-disable class-methods-use-this */
-import { createSlice, AsyncThunk, Slice } from '@reduxjs/toolkit';
+import { createSlice, Slice } from '@reduxjs/toolkit';
 type State = {
-  entity_list: never[];
+  response: any;
   loading: string;
   currentRequestId: undefined;
   error: null;
 }
 
-class Base_List_Slice {
+abstract class Base_Slice {
   entity_name: string;
   base_entity_name: string;
   async_thunk: any;
   async_thunk_list: any[] = [];
-  // async_thunk: AsyncThunk<any, number, {}>;
-  constructor(entity_name: string) {
-    console.log(`Base list slice: ${entity_name}`);
 
-    this.entity_name = `${entity_name}_list`;
+  constructor(entity_name: string) {
+    console.log(`Base slice: ${entity_name}`);
+    this.entity_name = `${entity_name}`;
     this.base_entity_name = entity_name;
-    // this.async_thunk = this.async_thunk_fn();
-    // this.async_thunk_list = [];
   }
 
-  // async_thunk_fn(): AsyncThunk<any, number, {}> {
-  //   throw new Error('You have to implement the method doSomething!');
-  // }
-
-  list_slice(): Slice<{
-    entity_list: never[];
-    loading: string;
-    currentRequestId: undefined;
-    error: null;
-  }, {}, string> {
+  slice(): Slice<State, any, string> {
 
     const extraReducers = this.async_thunk_list.reduce((acc, async_thunk) => {
       const x = {
@@ -45,7 +33,7 @@ class Base_List_Slice {
           const { requestId } = action.meta;
           if (state.loading === 'pending' && state.currentRequestId === requestId) {
             state.loading = 'idle';
-            state.entity_list = action.payload;
+            state.response = action.payload;
             state.currentRequestId = undefined;
           }
         },
@@ -64,7 +52,7 @@ class Base_List_Slice {
     return createSlice({
       name: `${this.entity_name}`,
       initialState: {
-        entity_list: [],
+        response: [],
         loading: 'idle',
         currentRequestId: undefined,
         error: null,
@@ -75,5 +63,4 @@ class Base_List_Slice {
   }
 }
 
-export default Base_List_Slice;
-// export default list_slice.reducer;
+export default Base_Slice;

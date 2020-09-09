@@ -1,13 +1,17 @@
 // import { } from '@reduxjs/toolkit';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  useParams,
+} from 'react-router-dom';
 import { Post_List } from '../../post/list/post_list';
-import { Album_List } from '../../album/list/album_list';
+import { AlbumList } from '../../album/list/album_list';
 import { Todo_List } from '../../todo/list/todo_list';
+import Debug from '../../../components/debug';
 
 const { select_user, user_detail_slice } = require('./user_detail_slice.ts');
 
-export function User_Detail({ match }) {
+export function UserDetail({ match }: { match: any }) {
   const user_id = parseInt(match.params.id, 10);
   const {
     entity, loading, currentRequestId, error,
@@ -18,7 +22,7 @@ export function User_Detail({ match }) {
   const handleFetchUser = () => {
     try {
       // console.log(`fetchOneUser - user_id: ${userId}`);
-      dispatch(user_detail_slice.async_thunk(user_id));
+      dispatch(user_detail_slice.fetch_by_id(user_id));
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }
@@ -61,17 +65,23 @@ export function User_Detail({ match }) {
 
     );
   }
-
+  const { id } = useParams();
   return (
     <div>
       <h3>
         User
       </h3>
+      {/* <Debug 
+        title="user detail"
+        response={entity}
+        loading={loading}
+        currentRequestId={currentRequestId}
+        error={error} /> */}
       {e_unit}
       <hr />
       <div className="row">
         <div className="col">
-          <Album_List />
+          <AlbumList />
         </div>
         <div className="col">
           <Post_List />

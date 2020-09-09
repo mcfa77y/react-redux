@@ -1,14 +1,17 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { user_api } from '../user_api';
-import Base_Detail_Slice from '../../base_detail_slice';
+import Base_Slice from '../../base_slice';
 
-class User_Detail_Slice extends Base_Detail_Slice {
+class User_Detail_Slice extends Base_Slice {
+  fetch_by_id: any;
   constructor() {
-    super('user');
+    super('user_detail');
     console.log('User_Detail_Slice created');
+    this.fetch_by_id = this.fetch_by_id_async_thunk();
+    this.async_thunk_list.push(this.fetch_by_id);
   }
 
-  async_thunk_fn() {
+  fetch_by_id_async_thunk() {
     console.log('calling album async thunk');
     return createAsyncThunk(
         `${this.base_entity_name}/fetch_entity_detail`,
@@ -25,8 +28,8 @@ class User_Detail_Slice extends Base_Detail_Slice {
 }
 
 
-export const select_user = (state: any) => state.user_detail;
-export const select_user_id = (state: any) => state.user_detail.entity.id;
+export const select_user = (state: any) => state.user_detail.response;
+export const select_user_id = (state: any) => state.user_detail.response.id;
 
 export const user_detail_slice = new User_Detail_Slice();
 
