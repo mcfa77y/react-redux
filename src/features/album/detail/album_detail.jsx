@@ -13,19 +13,19 @@ export function Album_Detail({ match }) {
 
   const dispatch = useDispatch();
 
-  const handleFetchAlbum = async () => {
-    try {
-      if (album_id === undefined) return;
-      console.log(`fetchAlbumList - album_id:${album_id}`);
-      await dispatch(album_detail_slice.async_thunk(album_id));
-    } catch (err) {
-      console.error(`fetchAlbumList failed: ${err.message}`);
-    }
-  };
-
+  
   useEffect(() => {
+    const handleFetchAlbum = async () => {
+      try {
+        if (album_id === undefined) return;
+        console.log(`fetchAlbumList - album_id:${album_id}`);
+        await dispatch(album_detail_slice.async_thunk(album_id));
+      } catch (err) {
+        console.error(`fetchAlbumList failed: ${err.message}`);
+      }
+    };
     handleFetchAlbum();
-  }, [album_id]);
+  }, [album_id, dispatch]);
 
   return (
     <div>

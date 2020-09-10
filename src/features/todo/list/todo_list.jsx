@@ -5,6 +5,7 @@ import DataTable from 'react-data-table-component';
 import { todo_list_slice, select_todo_list } from './todo_list_slice.ts';
 import { select_user_id } from '../../user/detail/user_detail_slice.ts';
 import { customStyles } from '../../style';
+import { FilterComponent } from '../../../components/filter.tsx';
 
 export function Todo_List() {
   const user_id = useSelector(select_user_id);
@@ -12,41 +13,19 @@ export function Todo_List() {
     entity_list, loading,
   } = useSelector(select_todo_list);
   const dispatch = useDispatch();
-  const handleTodoList = async () => {
-    try {
-      if (user_id === undefined) return;
-      console.log('fetchTodoList - :');
-      await dispatch(todo_list_slice.async_thunk(user_id));
-    } catch (err) {
-      console.error(`Fetch failed: ${err.message}`);
-    }
-  };
 
   useEffect(() => {
+    const handleTodoList = async () => {
+      try {
+        if (user_id === undefined) return;
+        console.log('fetchTodoList - :');
+        await dispatch(todo_list_slice.async_thunk(user_id));
+      } catch (err) {
+        console.error(`Fetch failed: ${err.message}`);
+      }
+    };
     handleTodoList();
-  }, [user_id]);
-
-  let e_list = (
-    <tr key={99}>
-      <th scope="row">{99}</th>
-      <td>no body</td>
-      <td>no@body.com</td>
-    </tr>
-  );
-  if (entity_list.length > 0) {
-    console.log(JSON.stringify(entity_list, null, 1));
-    e_list = entity_list.map(({ id, title, completed }) => (
-      <tr key={id}>
-        <th scope="row">{id}</th>
-        <td>
-          {String(completed)}
-        </td>
-        <td>
-          {title}
-        </td>
-      </tr>
-    ));
-  }
+  }, [user_id, dispatch]);
 
   const columns = [
     {
@@ -79,16 +58,41 @@ export function Todo_List() {
   ];
 
   const striped = true;
+  const [filterText, setFilterText] = React.useState('');
+  const [resetPaginationToggle, setResetPaginationToggle] = React.useState(false);
+  const filteredItems = entity_list
+    .filter((item) => item.title && item.title.toLowerCase().includes(filterText.toLowerCase()));
+
+  const subHeaderComponentMemo = React.useMemo(() => {
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle);
+        setFilterText('');
+      }
+    };
+
+    return (
+      <FilterComponent
+        onFilter={(e) => setFilterText(e.target.value)}
+        onClear={handleClear}
+        filterText={filterText}
+      />
+    );
+  }, [filterText, resetPaginationToggle]);
 
   return (
     <DataTable
       title="Todos"
       columns={columns}
-      data={entity_list}
+      data={filteredItems}
       striped={striped}
       progressPending={!loading}
       customStyles={customStyles}
       dense={striped}
+      pagination
+      paginationResetDefaultPage={resetPaginationToggle}
+      subHeader
+      subHeaderComponent={subHeaderComponentMemo}
     />
   );
 }

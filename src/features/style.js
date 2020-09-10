@@ -10,12 +10,21 @@ export const customStyles = {
       fontSize: '14px',
     },
   },
+  cells: {
+    style: {
+      paddingLeft: '8px', // override the cell padding for data cells
+      paddingRight: '8px',
+    },
+  },
   rows: {
     highlightOnHoverStyle: {
       backgroundColor: 'rgb(230, 244, 244)',
       borderBottomColor: '#FFFFFF',
-      borderRadius: '25px',
+      // borderRadius: '25px',
       outline: '1px solid #FFFFFF',
+    },
+    style: {
+      minHeight: '58px',
     },
   },
   pagination: {

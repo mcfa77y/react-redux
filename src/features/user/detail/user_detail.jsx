@@ -1,4 +1,3 @@
-// import { } from '@reduxjs/toolkit';
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Post_List } from '../../post/list/post_list';
@@ -10,7 +9,7 @@ const { select_user, user_detail_slice } = require('./user_detail_slice.ts');
 export function User_Detail({ match }) {
   const user_id = parseInt(match.params.id, 10);
   const {
-    entity, loading, currentRequestId, error,
+    entity
   } = useSelector(select_user);
 
   const dispatch = useDispatch();

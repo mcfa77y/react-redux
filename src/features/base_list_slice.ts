@@ -3,8 +3,11 @@ import { createSlice, AsyncThunk, Slice } from '@reduxjs/toolkit';
 
 class Base_List_Slice {
   entity_name: string;
+
   base_entity_name: string;
+
   async_thunk: any;
+
   // async_thunk: AsyncThunk<any, number, {}>;
   constructor(entity_name: string) {
     console.log(`Base list slice: ${entity_name}`);
@@ -14,7 +17,7 @@ class Base_List_Slice {
     this.async_thunk = this.async_thunk_fn();
   }
 
-  async_thunk_fn(): AsyncThunk<any, number, {}> {
+  async_thunk_fn(): AsyncThunk<any, any, {}> {
     throw new Error('You have to implement the method doSomething!');
   }
 

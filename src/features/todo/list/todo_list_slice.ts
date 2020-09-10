@@ -1,6 +1,5 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import Todo_API from '../todo_api';
-import { log_json } from '../../utils';
 import Base_List_Slice from '../../base_list_slice';
 
 const todo_api = new Todo_API();

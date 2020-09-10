@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -20,6 +20,11 @@
     "jsx": "react"
   },
   "include": [
-    "src"
-  ]
+    "src",
+    "./typings_custom/**/*.ts"
+  ],
+  "baseUrl": "./",
+    "paths" : {
+      "src/*": ["./src/*"]
+    }
 }

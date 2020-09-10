@@ -1,13 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { user_api } from '../user_api';
-import { log_json } from '../../utils';
 import Base_List_Slice from '../../base_list_slice';
 
 
 
 class User_List_Slice extends Base_List_Slice {
   constructor() {
-    super('post');
+    super('user');
   }
 
   async_thunk_fn() {

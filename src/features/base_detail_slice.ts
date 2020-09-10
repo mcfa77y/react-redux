@@ -3,9 +3,10 @@ import { createSlice, AsyncThunk, Slice } from '@reduxjs/toolkit';
 
 class Base_Detail_Slice {
   base_entity_name: string;
+
   entity_name: string;
+
   async_thunk: any;
-  // async_thunk: AsyncThunk<any, number, {}>;
 
   constructor(entity_name: string) {
     console.log(`Base detail slice: ${entity_name}`);
@@ -15,7 +16,7 @@ class Base_Detail_Slice {
     this.async_thunk = this.async_thunk_fn();
   }
 
-  async_thunk_fn(): AsyncThunk<any, number, {}> {
+  async_thunk_fn(): AsyncThunk<any, any, {}> {
     throw new Error('You have to implement the method doSomething!');
   }
 
@@ -39,6 +40,7 @@ class Base_Detail_Slice {
         [this.async_thunk.pending]: (state, action) => {
           if (state.loading === 'idle') {
             state.loading = 'pending';
+            state.entity = {};
             state.currentRequestId = action.meta.requestId;
           }
         },
@@ -54,6 +56,7 @@ class Base_Detail_Slice {
           const { requestId } = action.meta;
           if (state.loading === 'pending' && state.currentRequestId === requestId) {
             state.loading = 'idle';
+            state.entity = {};
             state.error = action.error;
             state.currentRequestId = undefined;
           }

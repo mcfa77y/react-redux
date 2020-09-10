@@ -22,12 +22,14 @@ module.exports = {
     plugins: [
         'react',
     ],
+    parser: 'babel-eslint',
     rules: {
         'linebreak-style': 'off',
-        'react/jsx-indent': [0, 4],
-        'jsx-indent-props': [0, 4],
+        'react/jsx-indent': [0, 2],
+        'jsx-indent-props': [0, 2],
         'no-param-reassign': 'off',
         'import/prefer-default-export': 'off',
+        "import/extensions": 'off',
         camelcase: 'off',
         indent: [
             'error',
@@ -37,6 +39,12 @@ module.exports = {
     settings: {
         react: {
             version: "detect"
-        }
+        },
+        'import/resolver': {
+            "node": {
+                extensions: ['.js', '.jsx', '.ts', '.tsx'],
+                "paths": ["src"]
+            }
+        },
     }
 };

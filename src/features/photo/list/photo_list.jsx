@@ -11,21 +11,22 @@ export function Photo_List() {
     entity_list: photo_list,
   } = useSelector((state) => state.photo_list);
 
+  
+  
   const dispatch = useDispatch();
-  const handle_photo_list = async () => {
-    try {
-      if (album_id === undefined) return;
-      console.log(`fetchPhotoList - album_id:${album_id}`);
-      await dispatch(photo_list_slice.async_thunk(album_id));
-      console.log(`xx album entity list size: ${photo_list.length} album_id:${album_id}`);
-    } catch (err) {
-      console.error(`fetchPhotoList failed: ${err.message}`);
-    }
-  };
-
   useEffect(() => {
+    const handle_photo_list = async () => {
+      try {
+        if (album_id === undefined) return;
+        console.log(`fetchPhotoList - album_id:${album_id}`);
+        await dispatch(photo_list_slice.async_thunk(album_id));
+        console.log(`xx album entity list size: ${photo_list.length} album_id:${album_id}`);
+      } catch (err) {
+        console.error(`fetchPhotoList failed: ${err.message}`);
+      }
+    };
     handle_photo_list();
-  }, [album_id]);
+  }, [album_id, dispatch]);
 
   let e_list = (
     <div>
@@ -37,7 +38,7 @@ export function Photo_List() {
     e_list = photo_list.map(({
       id, title, url, thumbnailUrl,
     }) => (
-      <div className="col-sm-6 col-md-2">
+      <div key={id} className="col-sm-6 col-md-2">
         <div className="card" style={{ width: '10rem' }}>
           <a href={url}><img className="card-img-top" src={thumbnailUrl} alt={title} /></a>
           <div className="card-body">

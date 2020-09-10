@@ -8,7 +8,7 @@ import { select_post, post_detail_slice } from './post_detail_slice';
 export function Post_Detail({ match }) {
   const post_id = parseInt(match.params.id, 10);
   const {
-    entity, loading, currentRequestId, error,
+    entity
   } = useSelector(select_post);
 
   const dispatch = useDispatch();

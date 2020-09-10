@@ -1,4 +1,4 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { comment_api } from '../comment_api';
 import Base_List_Slice from '../../base_list_slice';
 

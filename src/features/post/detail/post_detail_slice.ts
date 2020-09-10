@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import { post_api } from '../post_api';
 import Base_Detail_Slice from '../../base_detail_slice';
 

@@ -1,5 +1,5 @@
 // import {  } from '@reduxjs/toolkit';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
@@ -12,18 +12,18 @@ export function Album_List() {
   const user_id = useSelector(select_user_id);
 
   const {
-    entity_list, loading, currentRequestId, error,
+    entity_list, loading
   } = useSelector((state) => state.album_list);
 
   const dispatch = useDispatch();
-  const handle_album_list = async () => {
+  const handle_album_list = useCallback(async () => {
     if (user_id === undefined) return;
     await dispatch(album_list_slice.async_thunk(user_id));
-  };
+  }, [dispatch, user_id]);
 
   useEffect(() => {
     handle_album_list();
-  }, [user_id]);
+  }, [handle_album_list, user_id]);
 
   const columns = [
     {
@@ -57,6 +57,7 @@ export function Album_List() {
       progressPending={!loading}
       customStyles={customStyles}
       dense={striped}
+      pagination
       title="Albums"
     />
   );

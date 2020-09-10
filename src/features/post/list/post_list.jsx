@@ -1,5 +1,4 @@
-// import {  } from '@reduxjs/toolkit';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
@@ -11,18 +10,20 @@ export function Post_List() {
   const user_id = useSelector(select_user_id);
 
   const {
-    entity_list, loading, currentRequestId, error,
+    entity_list, loading,
   } = useSelector(select_posts);
 
   const dispatch = useDispatch();
-  const handle_post_list = async () => {
+
+  // https://www.youtube.com/watch?v=-Ls48dd-vJE
+  const handle_post_list = useCallback(async () => {
     if (user_id === undefined) return;
     await dispatch(post_list_slice.async_thunk(user_id));
-  };
+  }, [dispatch, user_id]);
 
   useEffect(() => {
     handle_post_list();
-  }, [user_id]);
+  }, [user_id, handle_post_list]);
 
   const columns = [
     {
@@ -45,16 +46,13 @@ export function Post_List() {
       ),
     }];
 
-  const striped = true;
-
   return (
     <DataTable
       columns={columns}
       data={entity_list}
-      striped={striped}
+      striped
       progressPending={!loading}
       customStyles={customStyles}
-      dense={striped}
       title="Posts"
     />
   );

@@ -1,5 +1,5 @@
 // import {  } from '@reduxjs/toolkit';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import DataTable from 'react-data-table-component';
@@ -8,22 +8,22 @@ import { customStyles } from '../../style';
 
 export function UserList() {
   const {
-    entity_list, loading, currentRequestId, error,
+    entity_list, loading
   } = useSelector(select_user_list);
 
   const dispatch = useDispatch();
-  const handleUserList = async () => {
+  const handleUserList = useCallback(async () => {
     try {
       console.log('fetchUserList - :');
       await dispatch(user_list_slice.async_thunk());
     } catch (err) {
       console.error(`Fetch failed: ${err.message}`);
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     handleUserList();
-  }, []);
+  }, [handleUserList]);
 
   const columns = [
     {
