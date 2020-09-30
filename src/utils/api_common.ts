@@ -10,3 +10,8 @@ export const unwrapData = (response: any) => {
   const { data } = response;
   return data;
 };
+
+
+export const unwrapErrorData = (response: any) => {
+  return response.response.data;
+};

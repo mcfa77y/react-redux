@@ -1,5 +1,6 @@
 import React from 'react'
 import { Switch, FormControlLabel } from '@material-ui/core';
+import { Use_Count_Renders } from '../../utils/use_count_renders';
 type SwitchInput_Props =
     {
         id: string,
@@ -8,32 +9,20 @@ type SwitchInput_Props =
         klass?: string
         onChange: any
     }
-export default function SwitchInput({ id, description, value, klass, onChange }: SwitchInput_Props) {
-
+const SwitchInput = React.memo(({ id, description, value, klass, onChange }: SwitchInput_Props) => {
+    Use_Count_Renders('Switch Input: ' + id);
     return (
         <FormControlLabel
-            control={<Switch 
+            control={<Switch
                 id={id}
                 name={id}
                 size="small"
                 checked={value}
                 onChange={onChange}
                 color="primary"
-                />}
+            />}
             label={description}
         />
-
-        // <div  className={"custom-control custom-switch " + klass}>
-        //     <input type="checkbox"
-        //         className="foobar custom-control-input"
-        //         id={id}
-        //         name={id}
-        //         autoComplete="off"
-        //         checked={value} />
-        //     <label className="custom-control-label" htmlFor={id}>
-        //         { description }
-        //     </label>
-
-        // </div>
     )
-}
+});
+export default SwitchInput;

@@ -15,12 +15,16 @@
     border: 1px solid #d9d9d9;
   }
   
-  .toolbarClassName .rdw-editor-toolbar {
-  }
-  
+
   .editorClassName {
     padding: 1rem;
     border: 1px solid #d9d9d9;
     border-radius: 0px 0px 7px 7px;
   }
   
+  .demo-color-modal {
+    position: absolute;
+    right: -70px;
+    top: 135%;
+    z-index: 100;
+}

@@ -1,25 +1,19 @@
-import React, { useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom';
-import DataTable from 'react-data-table-component';
-import { customStyles } from '../../style';
-import { FilterComponent } from '../../../components/filter';
-import { useSelector, useDispatch } from 'react-redux';
-import { select_customer_id } from '../../customer/detail/customer_detail_slice'
-import { select_report, report_detail_slice } from './report_detail_slice';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Debug } from '../../../components/debug';
-import { select_login_access_token } from '../../login/login_slice';
 import { Use_Count_Renders } from '../../../utils/use_count_renders';
-import { report_api } from '../report_api';
+import { select_login_access_token } from '../../login/login_slice';
 import ReportDetailForm from './report_detail_form';
+import { report_detail_slice, select_report } from './report_detail_slice';
 export default function ReportDetail({ match }: { match: any }) {
     const report_id = parseInt(match.params.id, 10);
-
     const access_token = useSelector(select_login_access_token);
 
     const {
         entity, loading, error,
         currentRequestId
     } = useSelector(select_report);
+
     Use_Count_Renders('Report Detail');
     const dispatch = useDispatch();
     useEffect(() => {
@@ -39,7 +33,9 @@ export default function ReportDetail({ match }: { match: any }) {
                 currentRequestId={currentRequestId} />
             <div>
                 <h4 className="card-title">Report: {entity?.report?.name}</h4>
-                <ReportDetailForm />
+                <ReportDetailForm
+                    entity={entity}
+                />
             </div >
         </div >
     )

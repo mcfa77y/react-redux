@@ -1,92 +1,125 @@
-import React, { useEffect } from 'react'
-import { Link, useLocation } from 'react-router-dom';
+import React, { useEffect, useRef } from 'react';
 import DataTable from 'react-data-table-component';
-import { customStyles } from '../../style';
-import { FilterComponent } from '../../../components/filter';
-import { useSelector, useDispatch } from 'react-redux';
-import { select_customer_id } from '../../customer/detail/customer_detail_slice'
-import { select_reports, report_list_slice } from './report_list_slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link, useLocation } from 'react-router-dom';
 import { Debug } from '../../../components/debug';
-import { select_login_access_token } from '../../login/login_slice';
+import { FilterComponent } from '../../../components/filter';
 import { Use_Count_Renders } from '../../../utils/use_count_renders';
-import { report_api } from '../report_api';
-export default function ReportList() {
-    const customer_id = useSelector(select_customer_id);
+import { select_login_access_token } from '../../login/login_slice';
+import { customStyles } from '../../style';
+import { report_list_slice, select_reports } from './report_list_slice';
+type ReportListProps = {
+    customer_id?: number
+}
+const columns = [
+    {
+        name: '#',
+        selector: 'id',
+        sortable: true,
+    },
+    {
+        name: 'Report',
+        selector: 'name',
+        sortable: true,
+        cell: (row: any) => (
+            <Link key={row.id + "_name"} to={`/report/${row.id}`}>{row.name}</Link>
+        ),
+    },
+    {
+        name: 'Status',
+        selector: 'status',
+        sortable: true,
+        width: '100px',
+    },
+    {
+        name: 'url',
+        selector: 'url',
+        sortable: true,
+        cell: (row: any) => (
+            <Link key={row.id + "_url"} to={`/dash/${row.url}`}>/dash/{row.url}</Link>
+        ),
+    },
+    {
+        name: 'access key',
+        selector: 'password',
+        sortable: true,
+    },
+    {
+        name: 'tags',
+        selector: 'url',
+        sortable: true,
+        cell: (row: any) =>
+            row.tag_desc_list.map((tag_desc: string) => (
+                <>
+                    <span key={tag_desc} className="badge badge-secondary">
+                        {tag_desc}
+                    </span>
+                    <br />
+                </>))
+        ,
+    },
+    {
+        name: 'created at',
+        selector: 'created_at',
+        sortable: true,
+    },
+    {
+        name: 'updated at',
+        selector: 'updated_at',
+        sortable: true,
+    }
+];
+
+const ReportList = React.memo(({ customer_id = -1 }: ReportListProps) => {
+    Use_Count_Renders('Report List- customer_id:' + customer_id);
+
+    // customer_id = customer_id === -1 ? useSelector(select_customer_id) : -1;
     const access_token = useSelector(select_login_access_token);
-    console.log('ReportList - customer_id: ' + customer_id);
 
     const {
         entity, loading, error,
         currentRequestId
     } = useSelector(select_reports);
-    Use_Count_Renders('Report List');
     const dispatch = useDispatch();
 
     const location = useLocation();
 
+    const prev_customer_id = useRef(-1);
     useEffect(() => {
         const handle_report_list = async () => {
             if (location.pathname === '/report') {
+                console.log("loading report list w/o customer");
+
                 dispatch(report_list_slice.fetch_all({ customer_id, access_token }));
             } else {
-                if (customer_id === undefined) return;
-                dispatch(report_list_slice.fetch_by_customer_id({ customer_id, access_token }));
+                if (customer_id === undefined || customer_id === prev_customer_id.current) return;
+                console.log("LOADING report list w customer: " + customer_id);
+                const x = await dispatch(report_list_slice.fetch_by_customer_id({ customer_id, access_token }));
+                console.log(`x: ${JSON.stringify(x, null, 2)}`);
+                console.log("/LOADING report list w customer: " + customer_id);
             }
+            prev_customer_id.current = customer_id;
         }
         handle_report_list();
-    },[customer_id, location]);
+    }, [customer_id, location]);
 
-    const columns = [
-        {
-            name: 'Report',
-            selector: 'name',
-            sortable: true,
-            cell: (row: any) => (
-                <Link to={`/report/${row.id}`}>{row.name}</Link>
-            ),
-        },
-        {
-            name: 'Status',
-            selector: 'status',
-            sortable: true,
-            width: '100px',
-        },
-        {
-            name: 'url',
-            selector: 'url',
-            sortable: true,
-            cell: (row: any) => (
-                <Link to={`/dash/${row.url}`}>/dash/{row.url}</Link>
-            ),
-        },
-        {
-            name: 'access key',
-            selector: 'password',
-            sortable: true,
-        },
-        {
-            name: 'tags',
-            selector: 'url',
-            sortable: true,
-            cell: (row: any) =>
-                row.tag_desc_list.map((tag_desc: string) => <><span key={tag_desc} className="badge badge-secondary">{tag_desc}</span><br /> </>)
-            ,
-        },
-        {
-            name: 'created at',
-            selector: 'created_at',
-            sortable: true,
-        },
-        {
-            name: 'updated at',
-            selector: 'updated_at',
-            sortable: true,
-        }
-    ];
+
 
     const [filter_text, set_filter_text] = React.useState('');
     const [reset_pagination_toggle, set_reset_pagination_toggle] = React.useState(false);
-    const filtered_items = entity?.report_list?.filter((item: any) => item.name && item.name.toLowerCase().includes(filter_text.toLowerCase()));
+
+    let filtered_items;
+    if (loading === 'pending' || entity?.report_list === undefined) {
+        filtered_items = [];
+    }
+    else {
+        filtered_items = entity?.report_list?.filter((item: any) => Object
+            .keys(item)
+            .some(attr => item[attr] && item[attr].toLowerCase && item[attr].toLowerCase().includes(filter_text.toLowerCase())
+            )
+        );
+    }
+    console.log(`filtered_items: ${JSON.stringify(filtered_items, null, 2)}`);
 
     const sub_header_component_memo = React.useMemo(() => {
         const handleClear = () => {
@@ -127,14 +160,15 @@ export default function ReportList() {
         // for (let row of selected_row_list) {
         //     console.log('deleting: ' + row.id)
         // }
-        dispatch(report_list_slice.delete({id_list, access_token}));
+        dispatch(report_list_slice.delete({ id_list, access_token }));
     }
+
     return (
         <div>
-            {/* <Debug entity={entity}
+            <Debug entity={entity}
                 error={error}
                 loading={loading}
-                currentRequestId={currentRequestId} /> */}
+                currentRequestId={currentRequestId} />
             <div>
                 <h4 className="card-title">Reports</h4>
                 <div style={{ height: '100%' }}>
@@ -143,7 +177,7 @@ export default function ReportList() {
                         striped
                         noHeader
                         data={filtered_items}
-                        progressPending={!loading}
+                        progressPending={(loading === 'pending')}
                         customStyles={customStyles}
                         dense={false}
                         subHeader
@@ -152,8 +186,8 @@ export default function ReportList() {
                         fixedHeader={true}
                         highlightOnHover={true}
                         overflowY={true}
-                        keyField={'password'}
                         onSelectedRowsChange={handle_selected_rows_change}
+                        
                     />
                 </div>
             </div>
@@ -167,4 +201,6 @@ export default function ReportList() {
             </div>
         </div >
     )
-}
+});
+
+export default ReportList;

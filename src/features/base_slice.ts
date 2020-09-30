@@ -52,7 +52,7 @@ abstract class Base_Slice {
           [async_thunk.pending]: (state: Lifecycle_State, action: any) => {
             if (state.loading === 'idle') {
               state.loading = 'pending';
-              // state.entity = {};
+              state.entity = {};
               state.currentRequestId = action.meta.requestId;
               state.error = null;
               console.log("PENDING: " + this.entity_name);
@@ -74,7 +74,11 @@ abstract class Base_Slice {
             if (state.loading === 'pending' && state.currentRequestId === requestId) {
               state.loading = 'idle';
               // state.entity = {};
-              state.error = action.error;
+              if (action.payload) {
+                state.error = action.payload;
+              } else {
+                state.error = action.error;
+              }
               state.currentRequestId = undefined;
               console.log("REJECTED: " + this.entity_name);
             }

@@ -1,8 +1,6 @@
-import {
-  createAsyncThunk, AsyncThunk, createSlice, Slice,
-} from '@reduxjs/toolkit';
-import { report_api } from '../report_api';
+import { AsyncThunk, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import Base_Slice, { Lifecycle_State } from '../../base_slice';
+import { report_api } from '../report_api';
 
 type Fetch_By_ID_Request = {
   report_id: number,
@@ -43,13 +41,17 @@ class Report_Detail_Slice extends Base_Slice {
     return createAsyncThunk(
       `${this.entity_name}/fetch_by_id`,
       async ({ report_id, access_token }: Fetch_By_ID_Request,
-        { getState, requestId }: { getState: any, requestId: any }) => {
+        { getState, requestId, rejectWithValue }: { getState: any, requestId: any, rejectWithValue: any }) => {
         const { currentRequestId, loading } = getState()[this.entity_name];
         if (loading !== 'pending' || requestId !== currentRequestId) {
           return;
         }
-        const response = await report_api.fetch_by_id(report_id, access_token);
-        return response;
+        try {
+          const response = await report_api.fetch_by_id(report_id, access_token);
+          return response;
+        } catch (err) {
+          return rejectWithValue(err.response.data);
+        }
       },
     );
   }
@@ -77,7 +79,12 @@ class Report_Detail_Slice extends Base_Slice {
     return state;
   }
 
-
+  // eslint-disable-next-line class-methods-use-this
+  update_report_json(state: Lifecycle_State, action: Update_HTML_JSON_Action) {
+    const { key, value } = action.payload;
+    state.entity.report[key] = value;
+    return state;
+  }
 
   createCustomExtraReducers(async_thunk: any) {
     let extraReducers = this.createExtraReducers([async_thunk]);
@@ -103,12 +110,13 @@ class Report_Detail_Slice extends Base_Slice {
       ...extraReducers,
       ...this.createCustomExtraReducers(this.update),
     };
-    const { initialState, update_html_json } = this;
+    const { initialState, update_html_json, update_report_json } = this;
     return createSlice({
       name: `${this.entity_name}`,
       initialState,
       reducers: {
         update_html_json,
+        update_report_json,
       },
       extraReducers,
     });
@@ -125,6 +133,7 @@ export const report_detail_slice_slice = report_detail_slice.slice();
 
 export const {
   update_html_json,
+  update_report_json,
 } = report_detail_slice_slice.actions;
 // export const report_detail_slice_actions = report_detail_slice_slice.actions;
 
