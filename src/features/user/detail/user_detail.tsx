@@ -13,9 +13,7 @@ const { select_user, user_detail_slice } = require('./user_detail_slice.ts');
 
 export function UserDetail({ match }: { match: any }) {
   const user_id = parseInt(match.params.id, 10);
-  const {
-    entity, loading, currentRequestId, error,
-  } = useSelector(select_user);
+  const entity: any = useSelector(select_user);
 
   const dispatch = useDispatch();
 
@@ -37,6 +35,8 @@ export function UserDetail({ match }: { match: any }) {
       loading
     </div>
   );
+
+    
 
   if (entity !== undefined && entity.id !== undefined) {
     e_unit = (
@@ -65,7 +65,7 @@ export function UserDetail({ match }: { match: any }) {
 
     );
   }
-  const { id } = useParams();
+  
   return (
     <div>
       <h3>
